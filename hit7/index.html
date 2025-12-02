@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Multiples of 7</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    input {
+      padding: 8px;
+      font-size: 16px;
+      width: 150px;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+    ul {
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <h1>拍柒小幫手</h1>
+
+  <p>輸入最大數字：</p>
+
+  <input type="number" id="limit" placeholder="e.g. 500" />
+  <button onclick="generate()">生成</button>
+
+  <ul id="result"></ul>
+
+  <script>
+    function generate() {
+      const limit = parseInt(document.getElementById("limit").value);
+      const result = document.getElementById("result");
+      result.innerHTML = "";
+
+      if (isNaN(limit) || limit < 7) {
+        result.innerHTML = "<li>請輸入 ≥ 7 之數字。</li>";
+        return;
+      }
+
+      for (let i = 7; i <= limit; i += 7) {
+        const item = document.createElement("li");
+        item.textContent = i;
+        result.appendChild(item);
+      }
+    }
+  </script>
+</body>
+</html>
