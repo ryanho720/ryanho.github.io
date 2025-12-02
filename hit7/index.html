@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Multiples of 7</title>
+  <title>拍柒小幫手</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -48,10 +48,15 @@
         return;
       }
 
-      for (let i = 7; i <= limit; i += 7) {
-        const item = document.createElement("li");
-        item.textContent = i;
-        result.appendChild(item);
+      for (let i = 1; i <= limit; i++) {
+        const isMultipleOfSeven = i % 7 === 0;
+        const containsSeven = i.toString().includes("7");
+
+        if (isMultipleOfSeven || containsSeven) {
+          const item = document.createElement("li");
+          item.textContent = i;
+          result.appendChild(item);
+        }
       }
     }
   </script>
