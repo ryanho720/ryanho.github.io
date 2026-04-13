@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>脫單公式計算器</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --paper-dark: #ede7d9;
+    --accent: #c0392b;
+    --muted: #7a6e61;
+    --border: rgba(26,20,16,0.15);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Noto Serif TC', serif;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page { max-width: 640px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .zh-title {
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    font-family: var(--mono);
+  }
+
+  .formula-display {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    letter-spacing: 0.03em;
+    line-height: 1.8;
+  }
+  .formula-display sub, .formula-display sup { font-size: 0.7em; }
+
+  .section { margin-bottom: 1.5rem; }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    padding-left: 2px;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .param-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .param-row:last-child { border-bottom: none; }
+  .param-row:hover { background: var(--paper); }
+
+  .name-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.9rem 1rem;
+  }
+
+  .sym {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    font-style: italic;
+    width: 32px;
+    flex-shrink: 0;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    width: 170px;
+    flex-shrink: 0;
+    line-height: 1.4;
+    font-family: var(--mono);
+  }
+
+  input[type=text] {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: var(--serif);
+    font-size: 0.9rem;
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type=text]:focus { border-color: var(--ink); }
+  input[type=text]::placeholder { color: var(--muted); opacity: 0.6; }
+
+  input[type=range] {
+    flex: 1;
+    height: 3px;
+    appearance: none;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 2px solid var(--paper);
+    box-shadow: 0 0 0 1px var(--ink);
+    cursor: pointer;
+  }
+  input[type=range]:focus::-webkit-slider-thumb {
+    background: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .val {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    min-width: 42px;
+    text-align: right;
+    color: var(--ink);
+  }
+
+  .k-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.9rem 1rem;
+  }
+
+  .k-toggle { display: flex; flex: 1; gap: 6px; }
+
+  .k-btn {
+    flex: 1;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    transition: all 0.15s;
+  }
+  .k-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .k-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .result-section { margin-top: 2rem; }
+
+  .result-card {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-card::before {
+    content: '\2764';
+    position: absolute;
+    font-size: 120px;
+    opacity: 0.04;
+    top: -10px; right: -20px;
+    line-height: 1;
+  }
+
+  .result-name {
+    font-size: 0.8rem;
+    font-family: var(--serif);
+    color: rgba(245,240,232,0.45);
+    margin-bottom: 0.25rem;
+    min-height: 1.2em;
+    letter-spacing: 0.05em;
+  }
+
+  .result-label {
+    font-size: 0.75rem;
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    color: rgba(245,240,232,0.5);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-num {
+    font-size: 4rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    transition: all 0.2s;
+  }
+  .result-num.high { color: #7ecfa0; }
+  .result-num.mid  { color: #f5c842; }
+  .result-num.low  { color: #e87c6a; }
+
+  .result-bar-wrap {
+    margin: 1.25rem auto 0;
+    max-width: 320px;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .result-bar {
+    height: 100%;
+    background: var(--paper);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  .verdict {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    font-family: var(--mono);
+    color: rgba(245,240,232,0.6);
+    min-height: 1.2em;
+  }
+
+  .io-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 1.5rem;
+  }
+
+  .io-btn {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-family: var(--mono);
+    color: var(--ink);
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .io-btn:hover { background: var(--paper-dark); border-color: var(--ink); }
+  .io-btn.export { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .io-btn.export:hover { opacity: 0.85; }
+
+  .import-label {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-family: var(--mono);
+    color: var(--ink);
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .import-label:hover { background: var(--paper-dark); border-color: var(--ink); }
+  #import-file { display: none; }
+
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 999;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  footer {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="zh-title">脫單公式</div>
+    <div class="subtitle">P(finding love) calculator · 概率計算器</div>
+  </header>
+
+  <div class="formula-display">
+    P<sub>脫單</sub> = 1 &minus; [1 &minus; p<sub>l</sub> &middot; p<sub>rl</sub> &middot; p<sub>s</sub> &middot; (k + (1&minus;k)p<sub>a</sub>)]<sup>N</sup>
+  </div>
+
+  <div class="section">
+    <div class="section-label">你的名字 · Your name</div>
+    <div class="card">
+      <div class="name-row">
+        <span class="sym" style="font-style:normal;">你</span>
+        <span class="desc">顯示於結果中</span>
+        <input type="text" id="username" placeholder="輸入你的名字…" maxlength="30">
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">樣本基數 · Sample size</div>
+    <div class="card">
+      <div class="param-row">
+        <span class="sym">N</span>
+        <span class="desc">接觸異性的總數</span>
+        <input type="range" id="N" min="10" max="500" step="10" value="100">
+        <span class="val" id="N-val">100</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">個人因素 · Your filters</div>
+    <div class="card">
+      <div class="param-row">
+        <span class="sym">p<sub>l</sub></span>
+        <span class="desc">你喜歡的異性佔比（你的篩選標準）</span>
+        <input type="range" id="pl" min="1" max="100" step="1" value="30">
+        <span class="val" id="pl-val">30%</span>
+      </div>
+      <div class="param-row">
+        <span class="sym">p<sub>rl</sub></span>
+        <span class="desc">喜歡你的異性佔比（你的吸引力）</span>
+        <input type="range" id="prl" min="1" max="100" step="1" value="30">
+        <span class="val" id="prl-val">30%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">環境因素 · Environment</div>
+    <div class="card">
+      <div class="param-row">
+        <span class="sym">p<sub>s</sub></span>
+        <span class="desc">異性的單身比例（環境的客觀狀態）</span>
+        <input type="range" id="ps" min="1" max="100" step="1" value="50">
+        <span class="val" id="ps-val">50%</span>
+      </div>
+      <div class="param-row">
+        <span class="sym">p<sub>a</sub></span>
+        <span class="desc">異性主動的比例（他人的性格分佈）</span>
+        <input type="range" id="pa" min="1" max="100" step="1" value="30">
+        <span class="val" id="pa-val">30%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">你的策略 · Strategy · 主動係數 k</div>
+    <div class="card">
+      <div class="k-row">
+        <span class="sym">k</span>
+        <span class="desc">你是否主動？</span>
+        <div class="k-toggle">
+          <button class="k-btn active" id="k1-btn" onclick="setK(1)">主動出擊 (k=1)</button>
+          <button class="k-btn" id="k0-btn" onclick="setK(0)">等待緣分 (k=0)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-section">
+    <div class="result-card">
+      <div class="result-name" id="result-name"></div>
+      <div class="result-label">P<sub>脫單</sub> &middot; 脫單概率</div>
+      <div class="result-num" id="result">&mdash;</div>
+      <div class="result-bar-wrap"><div class="result-bar" id="result-bar"></div></div>
+      <div class="verdict" id="verdict"></div>
+    </div>
+  </div>
+
+  <div class="io-row">
+    <button class="io-btn export" onclick="exportJSON()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v8M4 6l3 3 3-3M2 10v2a1 1 0 001 1h8a1 1 0 001-1v-2"/></svg>
+      匯出 JSON
+    </button>
+    <label class="import-label">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 9V1M4 4l3-3 3 3M2 10v2a1 1 0 001 1h8a1 1 0 001-1v-2"/></svg>
+      匯入 JSON
+      <input type="file" id="import-file" accept=".json">
+    </label>
+  </div>
+
+  <footer>based on viral Chinese formula &middot; 如有雷同，純屬緣分</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var kVal = 1;
+
+function setK(v) {
+  kVal = v;
+  document.getElementById('k1-btn').className = 'k-btn' + (v === 1 ? ' active' : '');
+  document.getElementById('k0-btn').className = 'k-btn' + (v === 0 ? ' active' : '');
+  calc();
+}
+
+function getState() {
+  return {
+    name: document.getElementById('username').value,
+    N:    parseInt(document.getElementById('N').value),
+    pl:   parseInt(document.getElementById('pl').value),
+    prl:  parseInt(document.getElementById('prl').value),
+    ps:   parseInt(document.getElementById('ps').value),
+    pa:   parseInt(document.getElementById('pa').value),
+    k:    kVal
+  };
+}
+
+function applyState(s) {
+  if (s.name !== undefined) document.getElementById('username').value = s.name;
+  if (s.N   !== undefined) { document.getElementById('N').value   = s.N;   document.getElementById('N-val').textContent   = s.N; }
+  if (s.pl  !== undefined) { document.getElementById('pl').value  = s.pl;  document.getElementById('pl-val').textContent  = s.pl  + '%'; }
+  if (s.prl !== undefined) { document.getElementById('prl').value = s.prl; document.getElementById('prl-val').textContent = s.prl + '%'; }
+  if (s.ps  !== undefined) { document.getElementById('ps').value  = s.ps;  document.getElementById('ps-val').textContent  = s.ps  + '%'; }
+  if (s.pa  !== undefined) { document.getElementById('pa').value  = s.pa;  document.getElementById('pa-val').textContent  = s.pa  + '%'; }
+  if (s.k   !== undefined) setK(s.k); else calc();
+}
+
+function calc() {
+  var s   = getState();
+  var pl  = s.pl  / 100;
+  var prl = s.prl / 100;
+  var ps  = s.ps  / 100;
+  var pa  = s.pa  / 100;
+  var inner = 1 - pl * prl * ps * (s.k + (1 - s.k) * pa);
+  var p = Math.max(0, Math.min(1, 1 - Math.pow(inner, s.N)));
+  var pct = (p * 100).toFixed(1);
+
+  var el = document.getElementById('result');
+  el.textContent = pct + '%';
+  el.className = 'result-num' + (p >= 0.7 ? ' high' : p >= 0.35 ? ' mid' : ' low');
+
+  document.getElementById('result-bar').style.width = pct + '%';
+
+  var name = s.name.trim();
+  document.getElementById('result-name').textContent = name ? name + ' 的脫單概率' : '';
+
+  var verdicts = [
+    [0.9, '緣分天注定 · Practically inevitable'],
+    [0.7, '很有希望！· Looking good!'],
+    [0.5, '五五開 · Coin flip'],
+    [0.3, '需要努力 · Time to put yourself out there'],
+    [0.1, '擴大社交圈 · Expand your social circle'],
+    [0,   '多出門走走 · Maybe go outside more'],
+  ];
+  var v = '';
+  for (var i = 0; i < verdicts.length; i++) {
+    if (p >= verdicts[i][0]) { v = verdicts[i][1]; break; }
+  }
+  document.getElementById('verdict').textContent = v;
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
+
+function exportJSON() {
+  var state = getState();
+  var json = JSON.stringify(state, null, 2);
+  var blob = new Blob([json], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  var safeName = state.name.trim().replace(/[^a-zA-Z0-9\u4e00-\u9fff]/g, '_') || '脫單';
+  a.href = url;
+  a.download = safeName + '_tuodian.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('已匯出 ' + a.download);
+}
+
+document.getElementById('import-file').addEventListener('change', function() {
+  var file = this.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var s = JSON.parse(e.target.result);
+      applyState(s);
+      showToast('已匯入：' + (s.name || '（無名稱）'));
+    } catch(err) {
+      showToast('匯入失敗：JSON 格式有誤');
+    }
+  };
+  reader.readAsText(file);
+  this.value = '';
+});
+
+var ids = ['N','pl','prl','ps','pa'];
+for (var i = 0; i < ids.length; i++) {
+  (function(id) {
+    var el  = document.getElementById(id);
+    var out = document.getElementById(id + '-val');
+    el.addEventListener('input', function() {
+      out.textContent = id === 'N' ? el.value : el.value + '%';
+      calc();
+    });
+  })(ids[i]);
+}
+
+document.getElementById('username').addEventListener('input', calc);
+
+calc();
+</script>
+</body>
+</html>
