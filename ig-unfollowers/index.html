@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IG Unfollow Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f5f5;
+  --surface: #ffffff;
+  --surface-2: #f0f0f0;
+  --border: #e0e0e0;
+  --text: #1a1a1a;
+  --text-muted: #8a8a8a;
+  --accent: #0095f6;
+  --ig-grad: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045);
+  --danger: #ed4956;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  padding: 2.5rem 1rem 5rem;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.page { max-width: 680px; margin: 0 auto; }
+
+/* ── Header ── */
+header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.logo {
+  width: 52px; height: 52px;
+  background: var(--ig-grad);
+  border-radius: 16px;
+  margin: 0 auto 1rem;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(131,58,180,0.35);
+}
+
+h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.35rem;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Upload zones ── */
+.upload-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.4rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--accent);
+  background: rgba(0,149,246,0.04);
+}
+
+.upload-zone.done {
+  border-color: var(--success);
+  border-style: solid;
+  background: rgba(39,174,96,0.05);
+}
+
+.upload-zone input[type="file"] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer;
+  width: 100%; height: 100%;
+}
+
+.upload-zone.done input[type="file"] { cursor: default; }
+
+.upload-icon { font-size: 1.6rem; margin-bottom: 0.35rem; }
+.upload-label { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+.upload-hint { font-size: 0.72rem; color: var(--text-muted); }
+.upload-sub { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.15rem; }
+.upload-zone.done .upload-label { color: var(--success); }
+
+/* ── Guide ── */
+.guide-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  margin-bottom: 1rem;
+  background: none;
+  border: none;
+  font-family: inherit;
+  padding: 0;
+}
+
+.guide-toggle:hover { color: var(--accent); }
+
+.guide-box {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.guide-box strong { color: var(--text); }
+.guide-box code {
+  background: var(--border);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.78em;
+  font-family: 'DM Mono', 'Fira Code', monospace;
+  color: var(--text);
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: filter 0.15s, background 0.15s, opacity 0.15s;
+  font-family: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 0.9rem;
+}
+.btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+.btn-primary:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; transform: none; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border);
+  font-size: 0.78rem;
+  padding: 0.35rem 0.8rem;
+}
+.btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
+
+.btn-star {
+  background: rgba(243,156,18,0.1);
+  color: var(--warning);
+  border: 1.5px solid rgba(243,156,18,0.3);
+  font-size: 0.78rem;
+  padding: 0.35rem 0.8rem;
+}
+.btn-star:hover { background: rgba(243,156,18,0.18); }
+
+.btn-unstar {
+  background: transparent;
+  color: var(--danger);
+  border: 1.5px solid rgba(237,73,86,0.3);
+  font-size: 0.78rem;
+  padding: 0.35rem 0.8rem;
+}
+.btn-unstar:hover { background: rgba(237,73,86,0.06); }
+
+.btn-export {
+  background: var(--success);
+  color: white;
+  flex: 1;
+  padding: 0.75rem;
+}
+.btn-export:hover { filter: brightness(1.06); }
+
+.btn-copy {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  flex: 1;
+  padding: 0.75rem;
+}
+.btn-copy:hover { background: var(--border); }
+
+/* ── Stats ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0;
+}
+
+.stat-box {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 0.5rem;
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  font-weight: 500;
+}
+
+.stat-num.danger { color: var(--danger); }
+.stat-num.warning { color: var(--warning); }
+.stat-num.success { color: var(--success); }
+
+/* ── Search ── */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.search-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.55rem 0.875rem 0.55rem 2.2rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-input:focus { border-color: var(--accent); }
+.search-input::placeholder { color: var(--text-muted); }
+
+/* ── User list ── */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 440px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  padding-right: 2px;
+}
+
+.user-list::-webkit-scrollbar { width: 4px; }
+.user-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: background 0.1s;
+}
+
+.user-row:hover { background: var(--bg); }
+
+.user-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  background: var(--ig-grad);
+  user-select: none;
+}
+
+.user-name {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-name a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.user-name a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* ── Whitelist section ── */
+.section-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: inherit;
+  padding: 0.3rem 0;
+  color: var(--text-muted);
+}
+
+.section-toggle:hover { color: var(--text); }
+.section-toggle .card-title { margin-bottom: 0; }
+
+.chevron {
+  transition: transform 0.2s;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.chevron.open { transform: rotate(180deg); }
+
+.collapsible { overflow: hidden; }
+.collapsible.hidden { display: none; }
+
+/* ── Export row ── */
+.export-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* ── Session history ── */
+.session-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+  gap: 0.5rem;
+}
+
+.session-row:last-child { border-bottom: none; }
+
+.session-date { color: var(--text-muted); font-size: 0.75rem; }
+
+/* ── Badge ── */
+.badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.12rem 0.5rem;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+  display: inline-block;
+}
+
+.badge-blue { background: rgba(0,149,246,0.12); color: var(--accent); }
+.badge-yellow { background: rgba(243,156,18,0.12); color: var(--warning); }
+.badge-red { background: rgba(237,73,86,0.12); color: var(--danger); }
+.badge-green { background: rgba(39,174,96,0.12); color: var(--success); }
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--text);
+  color: white;
+  padding: 0.6rem 1.3rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 1000;
+  pointer-events: none;
+  max-width: calc(100vw - 2rem);
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
+}
+
+.empty-state .big { font-size: 2.2rem; margin-bottom: 0.6rem; }
+.empty-state p { font-size: 0.875rem; }
+.empty-state .sub { font-size: 0.78rem; margin-top: 0.3rem; }
+
+/* ── Alert ── */
+.alert {
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  line-height: 1.55;
+}
+
+.alert-info { background: rgba(0,149,246,0.08); color: #005f99; border: 1px solid rgba(0,149,246,0.2); }
+.alert-warning { background: rgba(243,156,18,0.08); color: #875500; border: 1px solid rgba(243,156,18,0.25); }
+
+/* ── Misc ── */
+.hidden { display: none !important; }
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1rem 0;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(0,149,246,0.08);
+  color: var(--accent);
+  border-radius: 20px;
+  padding: 0.18rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .upload-grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  h1 { font-size: 1.5rem; }
+  .export-row { flex-direction: column; }
+  .export-row .btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+      </svg>
+    </div>
+    <h1>IG Unfollow Tracker</h1>
+    <p class="subtitle">Find out who doesn't follow you back</p>
+  </header>
+
+  <!-- ── Upload Card ── -->
+  <div class="card" id="upload-card">
+    <div class="card-title">Upload your Instagram data files</div>
+
+    <button class="guide-toggle" onclick="toggleGuide()" type="button" id="guide-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      How to get your files
+      <span id="guide-arrow">▾</span>
+    </button>
+
+    <div class="guide-box hidden" id="guide-box">
+      <strong>Step 1</strong> — <a href="https://accountscenter.instagram.com/info_and_permissions/dyi/?show_frameless=1" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Click here to open Instagram's Download Your Information page</a><br>
+      <strong>Step 2</strong> — Select <strong>HTML format</strong>, choose "Followers and Following", and request the download<br>
+      <strong>Step 3</strong> — Extract the ZIP. Inside <code>connections/followers_and_following/</code> you'll find:<br>
+      &nbsp;&nbsp;&nbsp;• <code>followers_1.html</code> (and <code>followers_2.html</code> etc. if you have many followers)<br>
+      &nbsp;&nbsp;&nbsp;• <code>following.html</code><br>
+      <strong>Step 4</strong> — Upload those files below. Select multiple files if your followers are split across files.
+    </div>
+
+    <!-- Followers + Following upload -->
+    <div class="upload-grid">
+      <div class="upload-zone" id="zone-followers"
+           ondragover="handleDrag(event,'followers')"
+           ondragleave="handleDragLeave('followers')"
+           ondrop="handleDrop(event,'followers')">
+        <input type="file" accept=".html,.htm" id="file-followers" multiple onchange="handleFileInput(event,'followers')">
+        <div class="upload-icon" id="icon-followers">👥</div>
+        <div class="upload-label" id="label-followers">followers_1.html</div>
+        <div class="upload-hint">Your followers list</div>
+        <div class="upload-sub" id="sub-followers">Supports multiple files</div>
+      </div>
+
+      <div class="upload-zone" id="zone-following"
+           ondragover="handleDrag(event,'following')"
+           ondragleave="handleDragLeave('following')"
+           ondrop="handleDrop(event,'following')">
+        <input type="file" accept=".html,.htm" id="file-following" multiple onchange="handleFileInput(event,'following')">
+        <div class="upload-icon" id="icon-following">➡️</div>
+        <div class="upload-label" id="label-following">following.html</div>
+        <div class="upload-hint">People you follow</div>
+        <div class="upload-sub" id="sub-following">Supports multiple files</div>
+      </div>
+    </div>
+
+    <!-- JSON import -->
+    <div class="upload-zone" id="zone-json" style="margin-bottom:1.1rem;"
+         ondragover="handleDrag(event,'json')"
+         ondragleave="handleDragLeave('json')"
+         ondrop="handleDrop(event,'json')">
+      <input type="file" accept=".json" id="file-json" onchange="handleFileInput(event,'json')">
+      <div class="upload-icon" id="icon-json">📂</div>
+      <div class="upload-label" id="label-json">Import saved data <span style="font-weight:400;color:var(--text-muted)">(optional)</span></div>
+      <div class="upload-hint">Restore whitelist from a previous session</div>
+    </div>
+
+    <div id="upload-alert" class="hidden"></div>
+    <div id="parse-debug" class="hidden" style="font-size:0.78rem;color:var(--text-muted);background:var(--bg);border-radius:var(--radius-sm);padding:0.65rem 0.85rem;margin-bottom:0.75rem;line-height:1.8;"></div>
+
+    <button class="btn btn-primary" id="analyze-btn" onclick="analyze()" disabled>
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Analyze
+    </button>
+  </div>
+
+  <!-- ── Results (hidden until analyzed) ── -->
+  <div id="results-section" class="hidden">
+
+    <!-- Stats -->
+    <div class="card">
+      <div class="card-title">Summary</div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" id="stat-following">–</div>
+          <div class="stat-label">Following</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-followers">–</div>
+          <div class="stat-label">Followers</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num danger" id="stat-unfollowers">–</div>
+          <div class="stat-label">Not following back</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num warning" id="stat-whitelisted">–</div>
+          <div class="stat-label">Whitelisted</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Not following back list -->
+    <div class="card">
+      <div class="card-title">
+        Not following back
+        <span class="badge badge-red" id="list-count">0</span>
+      </div>
+
+      <div class="list-header">
+        <div class="search-wrap">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" id="search-input" placeholder="Search…" oninput="renderUnfollowerList()">
+        </div>
+        <button class="btn btn-ghost" onclick="whitelistAll()" id="whitelist-all-btn" title="Add all visible to whitelist">⭐ All</button>
+      </div>
+
+      <div class="user-list" id="unfollowers-list"></div>
+    </div>
+
+    <!-- Whitelist / Favourites -->
+    <div class="card">
+      <button class="section-toggle" onclick="toggleSection('whitelist-content','whitelist-chevron')" type="button">
+        <div class="card-title">
+          Whitelist &amp; favourites
+          <span class="badge badge-yellow" id="whitelist-count">0</span>
+        </div>
+        <svg class="chevron" id="whitelist-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <div class="collapsible hidden" id="whitelist-content" style="margin-top:0.85rem;">
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.85rem;">Whitelisted accounts are hidden from the not-following-back list. They're saved in your exported JSON.</p>
+        <div class="user-list" id="whitelist-list" style="max-height:300px;"></div>
+      </div>
+    </div>
+
+    <!-- Session history (only if JSON imported) -->
+    <div class="card hidden" id="history-card">
+      <button class="section-toggle" onclick="toggleSection('history-content','history-chevron')" type="button">
+        <div class="card-title">
+          Session history
+          <span class="badge badge-blue" id="history-count">0</span>
+        </div>
+        <svg class="chevron" id="history-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <div class="collapsible hidden" id="history-content" style="margin-top:0.85rem;">
+        <div id="history-list"></div>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div class="card">
+      <div class="card-title">Save &amp; Export</div>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem;">
+        Export a JSON file with your whitelist + session history. Next time, import it to restore your whitelist. Each export appends the current session, so your data stacks over time.
+      </p>
+      <div class="export-row">
+        <button class="btn btn-export" onclick="exportJSON()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export JSON
+        </button>
+        <button class="btn btn-copy" onclick="copyList()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy usernames
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /results-section -->
+</div><!-- /page -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── State ────────────────────────────────────────────────────────────────────
+const st = {
+  followers:      new Set(),
+  following:      new Set(),
+  whitelist:      new Set(),
+  allUnfollowers: [],   // following - followers (raw)
+  unfollowers:    [],   // allUnfollowers minus whitelist
+  sessions:       [],   // from imported JSON
+};
+
+// Uploaded file lists
+const uploads = { followers: [], following: [], json: null };
+
+// ─── File upload handlers ─────────────────────────────────────────────────────
+
+function handleFileInput(e, type) {
+  const files = [...e.target.files];
+  if (!files.length) return;
+  if (type === 'json') {
+    uploads.json = files[0];
+    markDone('json', files[0].name);
+  } else {
+    uploads[type] = files;
+    const label = files.length === 1 ? files[0].name : `${files.length} files selected`;
+    markDone(type, label);
+  }
+  checkReady();
+}
+
+function handleDrag(e, type) {
+  e.preventDefault();
+  document.getElementById(`zone-${type}`).classList.add('drag-over');
+}
+
+function handleDragLeave(type) {
+  document.getElementById(`zone-${type}`).classList.remove('drag-over');
+}
+
+function handleDrop(e, type) {
+  e.preventDefault();
+  handleDragLeave(type);
+  const files = [...e.dataTransfer.files];
+  if (!files.length) return;
+  if (type === 'json') {
+    uploads.json = files[0];
+    markDone('json', files[0].name);
+  } else {
+    uploads[type] = files;
+    const label = files.length === 1 ? files[0].name : `${files.length} files selected`;
+    markDone(type, label);
+  }
+  checkReady();
+}
+
+function markDone(type, name) {
+  const zone  = document.getElementById(`zone-${type}`);
+  const icon  = document.getElementById(`icon-${type}`);
+  const label = document.getElementById(`label-${type}`);
+  zone.classList.add('done');
+  icon.textContent = '✅';
+  label.textContent = name;
+  const sub = document.getElementById(`sub-${type}`);
+  if (sub) sub.textContent = '';
+}
+
+function checkReady() {
+  document.getElementById('analyze-btn').disabled =
+    !(uploads.followers.length && uploads.following.length);
+}
+
+// ─── File reading ─────────────────────────────────────────────────────────────
+
+function readFileText(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload  = e => res(e.target.result);
+    r.onerror = rej;
+    r.readAsText(file, 'utf-8');
+  });
+}
+
+async function readAllHTML(files) {
+  const texts = await Promise.all(files.map(readFileText));
+  return texts;
+}
+
+// ─── Parsing ─────────────────────────────────────────────────────────────────
+
+const RESERVED = new Set(['p','explore','reel','reels','stories','accounts','direct',
+  'ar','tv','shop','about','legal','help','privacy','press','api','oauth',
+  'challenge','login','logout','register','contact_us','download','install',
+  'web','www','m','i','l','s']);
+
+function extractUsernames(html) {
+  const result = new Set();
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  // Method 1: <a href> — handles absolute instagram.com URLs and root-relative /username/ paths
+  doc.querySelectorAll('a[href]').forEach(a => {
+    const u = usernameFromURL(a.getAttribute('href'));
+    if (u) result.add(u);
+  });
+
+  // Method 2: anchor text content — in many IG export formats the link text IS the username
+  doc.querySelectorAll('a').forEach(a => {
+    const u = sanitiseUsername(a.textContent.trim());
+    if (u) result.add(u);
+  });
+
+  // Method 3: raw regex on the HTML string — absolute instagram.com URLs
+  const re = /instagram\.com\/(?:_u\/)?([A-Za-z0-9_][A-Za-z0-9._]{0,29})/g;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const u = sanitiseUsername(m[1]);
+    if (u) result.add(u);
+  }
+
+  return result;
+}
+
+function usernameFromURL(raw) {
+  if (!raw) return null;
+  // Absolute instagram.com URL — usernames can start with _ or alphanumeric
+  const abs = raw.match(/instagram\.com\/(?:_u\/)?([A-Za-z0-9_][A-Za-z0-9._]{0,29})/);
+  if (abs) return sanitiseUsername(abs[1]);
+  // Root-relative path: /username or /username/ (single segment only)
+  const rel = raw.match(/^\/([A-Za-z0-9_][A-Za-z0-9._]{0,29})\/?$/);
+  if (rel) return sanitiseUsername(rel[1]);
+  return null;
+}
+
+function sanitiseUsername(raw) {
+  if (!raw) return null;
+  const u = raw.toLowerCase().trim().replace(/[/@\s]+$/, '').replace(/^[@\s]+/, '');
+  if (!u || RESERVED.has(u)) return null;
+  if (u.length < 1 || u.length > 30) return null;
+  // Instagram usernames: letters, numbers, periods, underscores; can start with _ or alphanumeric
+  if (!/^[a-z0-9_][a-z0-9._]*$/.test(u)) return null;
+  return u;
+}
+
+// ─── Core analysis ────────────────────────────────────────────────────────────
+
+async function analyze() {
+  const btn = document.getElementById('analyze-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 0.7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.16-5.09"/></svg> Analyzing…';
+
+  try {
+    // Parse all follower HTMLs
+    const followerTexts  = await readAllHTML(uploads.followers);
+    const followingTexts = await readAllHTML(uploads.following);
+
+    st.followers = new Set();
+    st.following = new Set();
+
+    followerTexts.forEach(t  => extractUsernames(t).forEach(u => st.followers.add(u)));
+    followingTexts.forEach(t => extractUsernames(t).forEach(u => st.following.add(u)));
+
+    // Show debug info
+    const dbg = document.getElementById('parse-debug');
+    const fSize  = uploads.followers.reduce((s,f) => s + f.size, 0);
+    const fwSize = uploads.following.reduce((s,f) => s + f.size, 0);
+    let debugHTML =
+      `📄 Followers: <strong>${(fSize/1024).toFixed(1)} KB</strong> → <strong>${st.followers.size}</strong> accounts parsed<br>` +
+      `📄 Following: <strong>${(fwSize/1024).toFixed(1)} KB</strong> → <strong>${st.following.size}</strong> accounts parsed`;
+
+    // If following parsed suspiciously few, show diagnostic
+    if (st.following.size < 10 && followingTexts.length) {
+      const rawFw = followingTexts[0];
+      const fwDoc = new DOMParser().parseFromString(rawFw, 'text/html');
+      const aTags = [...fwDoc.querySelectorAll('a')];
+
+      const aInfo = aTags.length === 0
+        ? 'No &lt;a&gt; tags found'
+        : `${aTags.length} &lt;a&gt; tags found`;
+
+      // Show outerHTML of first 2 <a> tags to reveal structure
+      const aExamples = aTags.slice(0, 2).map(a =>
+        a.outerHTML.slice(0, 300).replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      ).join('\n\n');
+
+      debugHTML += `<br><br>` +
+        `<span style="color:var(--danger);font-weight:600">⚠ following.html: ${aInfo}</span><br>` +
+        `<span style="font-weight:600">First &lt;a&gt; tags:</span><br>` +
+        `<code style="display:block;white-space:pre-wrap;font-size:0.7rem;margin-top:0.3rem;background:var(--surface-2);padding:0.5rem;border-radius:4px;overflow-x:auto;max-height:200px;overflow-y:auto;">${aExamples || '(none)'}</code>`;
+    }
+    dbg.innerHTML = debugHTML;
+    dbg.classList.remove('hidden');
+
+    if (st.followers.size === 0 && st.following.size === 0) {
+      showAlert('⚠️ Could not read any usernames from these files. Make sure you\'re uploading the <strong>HTML format</strong> Instagram export (not JSON), and that the files are from <code>connections/followers_and_following/</code>.');
+      btn.disabled = false;
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Analyze';
+      return;
+    }
+    if (st.following.size === 0) {
+      showAlert('⚠️ Your <strong>following</strong> file appears empty or unreadable. Make sure you uploaded <code>following.html</code> in the correct slot.');
+      btn.disabled = false;
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Analyze';
+      return;
+    }
+    if (st.followers.size === 0) {
+      showAlert('⚠️ Your <strong>followers</strong> file appears empty or unreadable. Make sure you uploaded <code>followers_1.html</code> in the correct slot.');
+      btn.disabled = false;
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Analyze';
+      return;
+    }
+
+    // Load saved JSON if provided
+    if (uploads.json) {
+      const jsonText = await readFileText(uploads.json);
+      const parsed   = parseJSON(jsonText);
+      if (parsed) {
+        // Merge whitelist (union — never remove previous favourites)
+        (parsed.whitelist || []).forEach(u => {
+          const s = sanitiseUsername(u);
+          if (s) st.whitelist.add(s);
+        });
+        st.sessions = parsed.sessions || [];
+        const n = (parsed.whitelist || []).length;
+        if (n > 0) showToast(`✅ Loaded ${n} whitelisted account${n > 1 ? 's' : ''} from JSON`);
+      } else {
+        showToast('⚠️ Could not read the JSON file');
+      }
+    }
+
+    clearAlert();
+    compute();
+    render();
+
+    const sec = document.getElementById('results-section');
+    sec.classList.remove('hidden');
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showToast(`✅ Parsed ${st.followers.size} followers · ${st.following.size} following`);
+
+  } catch (err) {
+    showToast(`❌ Error: ${err.message}`);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Re-analyze';
+}
+
+function compute() {
+  // People you follow who don't follow you back
+  st.allUnfollowers = [...st.following].filter(u => !st.followers.has(u)).sort();
+  // Remove whitelisted
+  st.unfollowers = st.allUnfollowers.filter(u => !st.whitelist.has(u));
+}
+
+// ─── Rendering ────────────────────────────────────────────────────────────────
+
+function render() {
+  // Stats
+  document.getElementById('stat-following').textContent   = st.following.size;
+  document.getElementById('stat-followers').textContent   = st.followers.size;
+  document.getElementById('stat-unfollowers').textContent = st.unfollowers.length;
+  document.getElementById('stat-whitelisted').textContent = st.whitelist.size;
+
+  renderUnfollowerList();
+  renderWhitelistSection();
+  renderHistory();
+}
+
+function renderUnfollowerList() {
+  const q     = document.getElementById('search-input').value.toLowerCase().trim();
+  const items = q ? st.unfollowers.filter(u => u.includes(q)) : st.unfollowers;
+
+  document.getElementById('list-count').textContent = st.unfollowers.length;
+
+  const el = document.getElementById('unfollowers-list');
+  if (items.length === 0) {
+    el.innerHTML = `<div class="empty-state">
+      <div class="big">${q ? '🔍' : '🎉'}</div>
+      <p>${q ? 'No results for <strong>' + esc(q) + '</strong>' : 'No one to show here!'}</p>
+      <p class="sub">${q ? '' : (st.whitelist.size ? 'Everyone not following back is whitelisted.' : 'Everyone follows you back!')}</p>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = items.map(u => `
+    <div class="user-row" data-user="${u}">
+      <div class="user-avatar">${u[0].toUpperCase()}</div>
+      <div class="user-name">
+        <a href="https://www.instagram.com/${u}/" target="_blank" rel="noopener noreferrer">@${esc(u)}</a>
+      </div>
+      <div>
+        <button class="btn btn-star" data-action="whitelist" data-user="${u}" title="Add to whitelist">⭐ Favourite</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderWhitelistSection() {
+  const items = [...st.whitelist].sort();
+  document.getElementById('whitelist-count').textContent = items.length;
+
+  const el = document.getElementById('whitelist-list');
+  if (items.length === 0) {
+    el.innerHTML = '<div class="empty-state"><p style="font-size:0.82rem">No favourited accounts yet. Mark accounts to hide them from the not-following-back list.</p></div>';
+    return;
+  }
+
+  el.innerHTML = items.map(u => `
+    <div class="user-row" data-user="${u}">
+      <div class="user-avatar" style="opacity:0.7">${u[0].toUpperCase()}</div>
+      <div class="user-name">
+        <a href="https://www.instagram.com/${u}/" target="_blank" rel="noopener noreferrer">@${esc(u)}</a>
+      </div>
+      <div>
+        <button class="btn btn-unstar" data-action="unwhitelist" data-user="${u}" title="Remove from whitelist">✕ Remove</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderHistory() {
+  const card = document.getElementById('history-card');
+  if (st.sessions.length === 0) { card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+
+  document.getElementById('history-count').textContent = st.sessions.length;
+  const el = document.getElementById('history-list');
+
+  el.innerHTML = [...st.sessions].reverse().map((s, i) => {
+    const d = new Date(s.date);
+    const dateStr = isNaN(d) ? s.date : d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+    return `<div class="session-row">
+      <span class="session-date">${esc(dateStr)}</span>
+      <span style="font-size:0.8rem;color:var(--text-muted)">
+        Following <strong style="color:var(--text)">${s.stats?.following ?? '–'}</strong> &nbsp;·&nbsp;
+        Not following back <strong style="color:var(--danger)">${s.stats?.unfollowers_filtered ?? s.unfollowers?.length ?? '–'}</strong>
+      </span>
+    </div>`;
+  }).join('');
+}
+
+// ─── Event delegation (list actions) ─────────────────────────────────────────
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const u = btn.dataset.user;
+  if (btn.dataset.action === 'whitelist')   addToWhitelist(u);
+  if (btn.dataset.action === 'unwhitelist') removeFromWhitelist(u);
+});
+
+// ─── Whitelist management ─────────────────────────────────────────────────────
+
+function addToWhitelist(u) {
+  st.whitelist.add(u);
+  compute();
+  render();
+  showToast(`⭐ @${u} added to whitelist`);
+}
+
+function removeFromWhitelist(u) {
+  st.whitelist.delete(u);
+  compute();
+  render();
+  showToast(`@${u} removed from whitelist`);
+}
+
+function whitelistAll() {
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  const targets = q ? st.unfollowers.filter(u => u.includes(q)) : [...st.unfollowers];
+  if (!targets.length) { showToast('Nothing to whitelist'); return; }
+  targets.forEach(u => st.whitelist.add(u));
+  compute();
+  render();
+  showToast(`⭐ ${targets.length} account${targets.length > 1 ? 's' : ''} added to whitelist`);
+}
+
+// ─── JSON ─────────────────────────────────────────────────────────────────────
+
+function parseJSON(text) {
+  try {
+    const d = JSON.parse(text);
+    if (d && (d.whitelist || d.sessions)) return d;
+  } catch {}
+  return null;
+}
+
+function exportJSON() {
+  const now = new Date().toISOString();
+  const session = {
+    date: now,
+    stats: {
+      following:             st.following.size,
+      followers:             st.followers.size,
+      unfollowers_raw:       st.allUnfollowers.length,
+      whitelisted:           st.whitelist.size,
+      unfollowers_filtered:  st.unfollowers.length,
+    },
+    unfollowers:     [...st.unfollowers],
+    all_unfollowers: [...st.allUnfollowers],
+  };
+
+  const data = {
+    version:     2,
+    lastUpdated: now,
+    whitelist:   [...st.whitelist].sort(),
+    // Append current session to previous history
+    sessions:    [...st.sessions, session],
+  };
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href: url, download: `ig-tracker-${now.slice(0,10)}.json` });
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ JSON exported successfully!');
+}
+
+function copyList() {
+  if (!st.unfollowers.length) { showToast('Nothing to copy'); return; }
+  const text = st.unfollowers.map(u => `@${u}`).join('\n');
+  navigator.clipboard.writeText(text)
+    .then(() => showToast(`📋 Copied ${st.unfollowers.length} usernames`))
+    .catch(() => showToast('❌ Clipboard not available — try Export instead'));
+}
+
+// ─── UI toggles ───────────────────────────────────────────────────────────────
+
+function toggleGuide() {
+  const box   = document.getElementById('guide-box');
+  const arrow = document.getElementById('guide-arrow');
+  const open  = box.classList.toggle('hidden');
+  arrow.textContent = open ? '▾' : '▴';
+}
+
+function toggleSection(contentId, chevronId) {
+  const el = document.getElementById(contentId);
+  const ch = document.getElementById(chevronId);
+  el.classList.toggle('hidden');
+  ch.classList.toggle('open', !el.classList.contains('hidden'));
+}
+
+// ─── Utilities ────────────────────────────────────────────────────────────────
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+let _toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function showAlert(html, type = 'warning') {
+  const el = document.getElementById('upload-alert');
+  el.className = `alert alert-${type === 'warning' ? 'warning' : 'info'}`;
+  el.innerHTML = `<span>${type === 'warning' ? '⚠️' : 'ℹ️'}</span><span>${html}</span>`;
+  el.classList.remove('hidden');
+}
+
+function clearAlert() {
+  const el = document.getElementById('upload-alert');
+  el.classList.add('hidden');
+  el.innerHTML = '';
+}
+</script>
+
+<style>
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+</style>
+</body>
+</html>
