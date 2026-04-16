@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog · Ryan Ho</title>
+<link rel="icon" href="index_files/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  main { justify-content: flex-start; padding-top: 3.5rem; }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .page-header h1 {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-weight: 400;
+    margin-bottom: 0.35rem;
+  }
+
+  .page-header p {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .post-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .post-item:last-child { border-bottom: none; }
+  .post-item:hover { background: var(--paper-dark); }
+
+  .post-title {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 400;
+  }
+
+  .post-date {
+    font-size: 0.7rem;
+    color: var(--muted);
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--muted);
+  }
+
+  .empty-state p { font-size: 0.8rem; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="index_files/rh_studios.png" alt="Ryan Ho">
+    <span>Ryan Ho</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="blog.html" class="active">Blog</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="page">
+    <div class="page-header">
+      <h1>Blog</h1>
+      <p>Thoughts, notes, and things worth writing down.</p>
+    </div>
+
+    <!-- Add post entries here as <a class="post-item"> elements.
+         Remove the empty-state div when you add your first post. -->
+    <div class="empty-state">
+      <p>No posts yet — check back soon.</p>
+    </div>
+
+    <!-- Example post (uncomment to use):
+    <div class="post-list">
+      <a class="post-item" href="posts/my-first-post.html">
+        <span class="post-title">My First Post</span>
+        <span class="post-date">2025-01-01</span>
+      </a>
+    </div>
+    -->
+  </div>
+</main>
+
+<footer>© Ryan Ho™ <span id="yr"></span> · All rights reserved</footer>
+
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
