@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if page.title %}{{ page.title }} · {% endif %}Ryan Ho</title>
+<link rel="icon" href="{{ '/index_files/favicon.png' | relative_url }}">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Noto+Serif+TC:wght@400;600&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="{{ '/' | relative_url }}">
+    <img src="{{ '/index_files/rh_studios.png' | relative_url }}" alt="Ryan Ho">
+    <span>Ryan Ho</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="active"{% endif %}>Home</a></li>
+    <li><a href="{{ '/blog/' | relative_url }}" {% if page.url contains 'blog' %}class="active"{% endif %}>Blog</a></li>
+    <li><a href="{{ '/contact/' | relative_url }}" {% if page.url contains 'contact' %}class="active"{% endif %}>Contact</a></li>
+  </ul>
+</nav>
+
+{{ content }}
+
+<footer>© Ryan Ho™ <span id="yr"></span> · All rights reserved</footer>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>

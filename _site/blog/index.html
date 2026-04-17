@@ -1,7 +1,27 @@
----
-layout: default
-title: Blog
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog · Ryan Ho</title>
+<link rel="icon" href="/index_files/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Noto+Serif+TC:wght@400;600&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="/index_files/rh_studios.png" alt="Ryan Ho">
+    <span>Ryan Ho</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/" >Home</a></li>
+    <li><a href="/blog/" class="active">Blog</a></li>
+    <li><a href="/contact/" >Contact</a></li>
+  </ul>
+</nav>
+
 <style>
   main { justify-content: flex-start; padding-top: 3.5rem; }
 
@@ -77,18 +97,16 @@ title: Blog
     <p>thoughts, notes, and things worth writing down.</p>
   </div>
 
-  {% if site.posts.size > 0 %}
-  <div class="post-list">
-    {% for post in site.posts %}
-    <a class="post-item" href="{{ post.url | relative_url }}">
-      <span class="post-title">{{ post.title }}</span>
-      <span class="post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
-    </a>
-    {% endfor %}
-  </div>
-  {% else %}
+  
   <div class="empty-state">
     <p>no posts yet — check back soon.</p>
   </div>
-  {% endif %}
+  
 </main>
+
+
+<footer>© Ryan Ho™ <span id="yr"></span> · All rights reserved</footer>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>

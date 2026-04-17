@@ -1,0 +1,10 @@
+title: Ryan Ho
+url: "https://www.ryanho.co"
+baseurl: ""
+
+permalink: pretty
+timezone: Europe/London
+markdown: kramdown
+
+exclude:
+  - README.md
