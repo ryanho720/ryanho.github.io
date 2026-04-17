@@ -7,13 +7,14 @@
   --muted: #7a6e61;
   --border: rgba(26,20,16,0.15);
   --mono: 'DM Mono', monospace;
-  --serif: 'DM Serif Display', serif;
+  --serif: 'DM Serif Display', 'Noto Serif TC', 'Noto Serif KR', serif;
 }
 
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--mono);
+  text-transform: lowercase;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -44,9 +45,9 @@ nav {
 }
 
 .nav-logo span {
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight: 400;
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .nav-links {

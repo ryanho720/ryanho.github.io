@@ -7,33 +7,188 @@
 <link rel="icon" href="index_files/favicon.png">
 <meta property="og:title" content="Ryan Ho">
 <meta property="og:url" content="https://www.ryanho.co/">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Noto+Serif+TC:wght@400;600&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  main { text-align: center; }
-
-  .logo {
-    width: 72px;
-    height: 72px;
-    object-fit: contain;
-    border-radius: 50%;
-    margin-bottom: 1.75rem;
+  /* ── Hero ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 3rem;
+    padding: 5rem 0 4rem;
+    border-bottom: 1px solid var(--border);
   }
 
-  h1 {
-    font-family: var(--serif);
-    font-size: 3rem;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    line-height: 1;
+  .hero-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
     margin-bottom: 1rem;
   }
 
-  .subtitle {
-    font-size: 0.8rem;
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 6vw, 4rem);
+    font-weight: 400;
+    line-height: 1.05;
+    margin-bottom: 1.25rem;
+    text-transform: none;
+  }
+
+  .hero h1 em {
+    font-style: italic;
     color: var(--muted);
-    letter-spacing: 0.12em;
+  }
+
+  .hero-bio {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 420px;
+    margin-bottom: 2rem;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: all 0.15s;
+  }
+  .hero-links a:hover { background: var(--paper-dark); border-color: var(--ink); }
+  .hero-links a.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .hero-links a.primary:hover { opacity: 0.82; }
+
+  .hero-photo {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--paper-dark);
+    flex-shrink: 0;
+  }
+
+  /* ── Section ── */
+  section {
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .section-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── About ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .about-text {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  .about-text p + p { margin-top: 0.9rem; }
+
+  .stat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.65rem 1rem;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+
+  .stat-item span:first-child { color: var(--muted); }
+  .stat-item span:last-child { font-weight: 500; }
+
+  /* ── Projects ── */
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .project-card {
+    display: block;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    transition: all 0.15s;
+  }
+  .project-card:hover { background: var(--paper-dark); border-color: var(--ink); transform: translateY(-1px); }
+
+  .project-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .project-title {
+    font-family: var(--mono);
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .project-arrow {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    transition: transform 0.15s;
+  }
+  .project-card:hover .project-arrow { transform: translateX(3px); }
+
+  /* ── Responsive ── */
+  @media (max-width: 580px) {
+    .hero { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-photo { width: 100px; height: 100px; order: -1; }
+    .about-grid { grid-template-columns: 1fr; }
+    .project-grid { grid-template-columns: 1fr; }
+    main { padding: 0 1.25rem 3rem; }
   }
 </style>
 </head>
@@ -51,13 +206,90 @@
   </ul>
 </nav>
 
-<main>
-  <div class="page">
-    <img src="index_files/rh_studios.png" alt="Ryan Ho" class="logo">
-    <h1>Ryan Ho</h1>
-    <div class="divider"></div>
-    <p class="subtitle">New website coming soon</p>
+<main style="display:block; padding: 0 2rem 4rem; max-width: 780px; margin: 0 auto; width: 100%;">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div>
+      <p class="hero-tag">Based in — <!-- your city --></p>
+      <h1>ryan ho<br><em><!-- your tagline --></em></h1>
+      <p class="hero-bio">
+        <!-- 2–3 sentences about who you are and what you do. -->
+        Designer, developer, and creator of things.
+        I build thoughtful digital experiences that sit at the intersection of craft and code.
+      </p>
+      <div class="hero-links">
+        <a href="contact.html" class="primary">Get in touch</a>
+        <a href="blog.html">Read the blog</a>
+        <!-- Add more links as needed, e.g. GitHub, LinkedIn -->
+        <a href="https://github.com/" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+    <!-- Swap src for a real headshot; remove the img tag if you prefer no photo -->
+    <img src="index_files/rh_studios.png" alt="Ryan Ho" class="hero-photo">
   </div>
+
+  <!-- About -->
+  <section>
+    <p class="section-label">About</p>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          <!-- Paragraph 1: background, education, or origin story -->
+          Replace this with a short paragraph about yourself — where you're from,
+          what you studied, or how you got into what you do.
+        </p>
+        <p>
+          <!-- Paragraph 2: current focus or interests -->
+          Currently focused on <!-- your focus -->.
+          Outside of work you'll find me <!-- hobby / interest -->.
+        </p>
+      </div>
+      <div class="stat-list">
+        <!-- Edit or add rows to match your background -->
+        <div class="stat-item"><span>Based in</span><span><!-- City --></span></div>
+        <div class="stat-item"><span>Role</span><span><!-- Your role --></span></div>
+        <div class="stat-item"><span>Education</span><span><!-- School / degree --></span></div>
+        <div class="stat-item"><span>Available for</span><span><!-- Freelance / full-time / etc --></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section>
+    <p class="section-label">Projects</p>
+    <div class="project-grid">
+      <!-- Duplicate or remove cards as needed -->
+      <a class="project-card" href="tyutdaancalc/">
+        <p class="project-tag">Tool · 2025</p>
+        <p class="project-title">脫單公式計算器</p>
+        <p class="project-desc">A probability calculator for finding love, based on the viral Chinese formula.</p>
+        <span class="project-arrow">View →</span>
+      </a>
+
+      <a class="project-card" href="#">
+        <p class="project-tag"><!-- Category · Year --></p>
+        <p class="project-title"><!-- Project title --></p>
+        <p class="project-desc"><!-- One or two sentences describing what this project is and why it matters. --></p>
+        <span class="project-arrow">View →</span>
+      </a>
+
+      <a class="project-card" href="#">
+        <p class="project-tag"><!-- Category · Year --></p>
+        <p class="project-title"><!-- Project title --></p>
+        <p class="project-desc"><!-- One or two sentences describing what this project is and why it matters. --></p>
+        <span class="project-arrow">View →</span>
+      </a>
+
+      <a class="project-card" href="#">
+        <p class="project-tag"><!-- Category · Year --></p>
+        <p class="project-title"><!-- Project title --></p>
+        <p class="project-desc"><!-- One or two sentences describing what this project is and why it matters. --></p>
+        <span class="project-arrow">View →</span>
+      </a>
+    </div>
+  </section>
+
 </main>
 
 <footer>© Ryan Ho™ <span id="yr"></span> · All rights reserved</footer>
