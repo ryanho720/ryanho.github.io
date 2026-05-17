@@ -133,62 +133,12 @@
   .stat-item span:first-child { color: var(--muted); }
   .stat-item span:last-child { font-weight: 500; }
 
-  /* ── Projects ── */
-  .project-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  .project-card {
-    display: block;
-    text-decoration: none;
-    color: var(--ink);
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.25rem 1.5rem;
-    transition: all 0.15s;
-  }
-  .project-card:hover { background: var(--paper-dark); border-color: var(--ink); transform: translateY(-1px); }
-
-  .project-tag {
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.6rem;
-  }
-
-  .project-title {
-    font-family: var(--mono);
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-
-  .project-desc {
-    font-size: 0.78rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .project-arrow {
-    display: inline-block;
-    margin-top: 1rem;
-    font-size: 0.75rem;
-    color: var(--muted);
-    transition: transform 0.15s;
-  }
-  .project-card:hover .project-arrow { transform: translateX(3px); }
-
   /* ── Responsive ── */
   @media (max-width: 580px) {
     .hero { grid-template-columns: 1fr; gap: 2rem; }
     .hero-photo { width: 100px; height: 100px; order: -1; }
     .about-grid { grid-template-columns: 1fr; }
-    .project-grid { grid-template-columns: 1fr; }
-    main { padding: 0 1.25rem 3rem; }
+main { padding: 0 1.25rem 3rem; }
   }
 </style>
 </head>
@@ -212,7 +162,7 @@
   <div class="hero">
     <div>
       <p class="hero-tag">Based in London</p>
-      <h1>ryan ho 라이언 하<br><em><!-- your tagline --></em></h1>
+      <h1>ryan ho<br><em><!-- your tagline --></em></h1>
       <p class="hero-bio">
         <!-- 2–3 sentences about who you are and what you do. -->
         the traveller
@@ -250,36 +200,6 @@
     </div>
   </section>
 
-  <!-- Projects -->
-  <section>
-    <p class="section-label">Projects</p>
-    <div class="project-grid">
-      <!-- Duplicate or remove cards as needed -->
-      <a class="project-card" href="/tyutdaancalc/">
-        <p class="project-tag">tool · 2025</p>
-        <p class="project-title">脫單公式計算器</p>
-        <p class="project-desc">a probability calculator for finding love, based on the viral chinese formula.</p>
-        <span class="project-arrow">view →</span>
-      </a>
-
-      <a class="project-card" href="/hit7/">
-        <p class="project-tag">tool · 2025</p>
-        <p class="project-title">拍柒小幫手</p>
-        <p class="project-desc"><!-- add a short description --></p>
-        <span class="project-arrow">view →</span>
-      </a>
-
-      <a class="project-card" href="/ig-unfollowers/">
-        <p class="project-tag">tool · 2025</p>
-        <p class="project-title">IG unfollow tracker</p>
-        <p class="project-desc">track who unfollowed you on instagram.</p>
-        <span class="project-arrow">view →</span>
-      </a>
-
-      <!-- add more project cards here -->
-
-    </div>
-  </section>
 
 </main>
 
