@@ -1,0 +1,459 @@
+---
+layout: default
+title: "Portugal — 14–26 June"
+date: 2026-06-14 00:00:00
+---
+<style>
+  .itinerary-page {
+    --terra: #B84C25;
+    --terra-light: #F0C9B4;
+    --navy: #1B2B4B;
+    --navy-light: #E8EDF5;
+    --gold: #B8882A;
+    --gold-light: #F5E8C8;
+    --sage: #3D6B50;
+    --sage-light: #D4E8DC;
+    --copper: #8B5A3C;
+    --copper-light: #E8D4C2;
+    --parchment: #F9F4EC;
+    --parchment-dark: #EFE8D8;
+    --ink: #1C1714;
+    --muted: #6B5E52;
+    --border: #DDD5C8;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--parchment);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .itinerary-page .page { max-width: 860px; margin: 0 auto; padding: 0 32px 64px; }
+
+  /* HERO */
+  .itinerary-page .hero { padding: 64px 0 48px; border-bottom: 1px solid var(--border); }
+  .itinerary-page .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.18em; color: var(--terra); text-transform: uppercase; margin-bottom: 16px; }
+  .itinerary-page .hero-title { font-family: 'Cormorant Garamond', serif; font-size: 96px; font-weight: 300; line-height: 0.9; color: var(--navy); letter-spacing: -2px; margin-bottom: 24px; }
+  .itinerary-page .hero-title em { font-style: italic; color: var(--terra); }
+  .itinerary-page .hero-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--muted); font-style: italic; margin-bottom: 32px; }
+  .itinerary-page .hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+  .itinerary-page .hero-stat { display: flex; flex-direction: column; gap: 2px; }
+  .itinerary-page .hero-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 500; color: var(--navy); line-height: 1; }
+  .itinerary-page .hero-stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .itinerary-page .hero-divider { width: 1px; background: var(--border); align-self: stretch; }
+
+  /* SECTIONS */
+  .itinerary-page .section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 24px; }
+
+  /* ROUTE */
+  .itinerary-page .route-section { padding: 40px 0 32px; border-bottom: 1px solid var(--border); }
+  .itinerary-page .route-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+  .itinerary-page .route-stop { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .itinerary-page .route-stop-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .itinerary-page .route-stop-name { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 500; color: var(--navy); white-space: nowrap; }
+  .itinerary-page .route-stop-dates { font-size: 10px; color: var(--muted); white-space: nowrap; }
+  .itinerary-page .route-arrow { font-size: 14px; color: var(--border); padding: 0 8px 20px; }
+  .itinerary-page .algarve .route-stop-dot { background: var(--terra); }
+  .itinerary-page .lisbon .route-stop-dot { background: var(--gold); }
+  .itinerary-page .porto .route-stop-dot { background: var(--navy); }
+  .itinerary-page .minho .route-stop-dot { background: var(--sage); }
+  .itinerary-page .douro .route-stop-dot { background: var(--copper); }
+  .itinerary-page .legend { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+  .itinerary-page .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+  .itinerary-page .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* STOPS */
+  .itinerary-page .stops-section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+  .itinerary-page .stop-card { display: grid; grid-template-columns: 100px 1fr; gap: 0 24px; padding: 20px 0; border-bottom: 0.5px solid var(--border); position: relative; }
+  .itinerary-page .stop-card:last-child { border-bottom: none; }
+  .itinerary-page .stop-card::before { content: ''; position: absolute; left: -16px; top: 16px; bottom: 16px; width: 3px; border-radius: 2px; }
+  .itinerary-page .stop-card.algarve::before { background: var(--terra); }
+  .itinerary-page .stop-card.lisbon::before { background: var(--gold); }
+  .itinerary-page .stop-card.porto::before { background: var(--navy); }
+  .itinerary-page .stop-card.minho::before { background: var(--sage); }
+  .itinerary-page .stop-card.douro::before { background: var(--copper); }
+  .itinerary-page .stop-meta { padding-top: 4px; }
+  .itinerary-page .stop-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 4px; }
+  .itinerary-page .stop-dates { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.3; margin-bottom: 2px; }
+  .itinerary-page .stop-nights { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .itinerary-page .stop-city { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 500; color: var(--navy); line-height: 1.1; margin-bottom: 2px; }
+  .itinerary-page .stop-region { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; font-family: 'DM Mono', monospace; }
+  .itinerary-page .stop-property { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .itinerary-page .stop-property-type { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .itinerary-page .stop-pricing { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); align-items: baseline; }
+  .itinerary-page .stop-price { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; color: var(--navy); }
+  .itinerary-page .stop-price-label { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .itinerary-page .stop-pp { color: var(--sage); font-weight: 500; font-size: 12px; }
+  .itinerary-page .booked-tag { display: inline-block; font-size: 9px; padding: 2px 7px; border-radius: 10px; background: var(--sage-light); color: var(--sage); font-weight: 500; font-family: 'DM Mono', monospace; letter-spacing: 0.05em; margin-left: 6px; vertical-align: middle; }
+
+  /* TRANSPORT */
+  .itinerary-page .transport-section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+  .itinerary-page .transport-item { display: grid; grid-template-columns: 100px 1fr auto; gap: 20px; padding: 14px 0; border-bottom: 0.5px solid var(--border); align-items: center; }
+  .itinerary-page .transport-item:last-child { border-bottom: none; }
+  .itinerary-page .transport-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .itinerary-page .transport-detail { font-size: 13px; color: var(--ink); }
+  .itinerary-page .transport-mode { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .itinerary-page .transport-price { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: var(--navy); text-align: right; }
+  .itinerary-page .transport-price-pp { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; text-align: right; margin-top: 2px; }
+  .itinerary-page .transport-icon { font-size: 14px; margin-right: 6px; }
+
+  /* BUDGET */
+  .itinerary-page .budget-section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+  .itinerary-page .budget-total { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+  .itinerary-page .budget-num { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--navy); line-height: 1; }
+  .itinerary-page .budget-label { font-size: 13px; color: var(--muted); }
+  .itinerary-page .budget-note { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 24px; }
+  .itinerary-page .budget-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .itinerary-page .budget-cell { background: var(--parchment); padding: 16px 14px; }
+  .itinerary-page .budget-cell-wide { grid-column: span 2; background: var(--parchment-dark); }
+  .itinerary-page .budget-cat { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; font-family: 'DM Mono', monospace; }
+  .itinerary-page .budget-amt { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; color: var(--navy); line-height: 1; margin-bottom: 4px; }
+  .itinerary-page .budget-amt-large { font-size: 36px; }
+  .itinerary-page .budget-cell-detail { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+  .itinerary-page .budget-bar { height: 2px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+  .itinerary-page .budget-bar-fill { height: 100%; border-radius: 2px; }
+
+  /* NOTES */
+  .itinerary-page .notes-section { padding: 40px 0 0; }
+  .itinerary-page .notes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 4px; }
+  .itinerary-page .note-card { background: var(--parchment-dark); border-radius: 8px; padding: 16px; }
+  .itinerary-page .note-icon { font-size: 18px; margin-bottom: 8px; display: block; }
+  .itinerary-page .note-title { font-size: 12px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .itinerary-page .note-text { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* FOOTER */
+  .itinerary-page .itinerary-footer { padding: 32px 0 0; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); margin-top: 40px; }
+  .itinerary-page .footer-left { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: var(--muted); }
+  .itinerary-page .footer-right { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--border); letter-spacing: 0.1em; text-align: right; }
+
+  @media (max-width: 600px) {
+    .itinerary-page .hero-title { font-size: 56px; }
+    .itinerary-page .budget-grid { grid-template-columns: 1fr; }
+    .itinerary-page .notes-grid { grid-template-columns: 1fr; }
+    .itinerary-page .stop-card { grid-template-columns: 80px 1fr; }
+    .itinerary-page .transport-item { grid-template-columns: 70px 1fr auto; gap: 10px; }
+  }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+
+<div class="itinerary-page">
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-eyebrow">Personal Itinerary · 13 Days · Adam &amp; Ryan</div>
+    <div class="hero-title">Port<em>u</em>gal</div>
+    <div class="hero-subtitle">Algarve coast, Atlantic cities, the Minho hills &amp; the Douro</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num">13</div><div class="hero-stat-label">Days</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-num">5</div><div class="hero-stat-label">Stops</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-num">12</div><div class="hero-stat-label">Nights</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-num">£530</div><div class="hero-stat-label">Per person</div></div>
+    </div>
+  </div>
+
+  <div class="route-section">
+    <div class="section-label">Route Overview</div>
+    <div class="route-flow">
+      <div class="route-stop algarve"><div class="route-stop-dot"></div><div class="route-stop-name">Faro</div><div class="route-stop-dates">14–16 Jun</div></div>
+      <div class="route-arrow">→</div>
+      <div class="route-stop lisbon"><div class="route-stop-dot"></div><div class="route-stop-name">Lisbon</div><div class="route-stop-dates">16–19 Jun</div></div>
+      <div class="route-arrow">→</div>
+      <div class="route-stop porto"><div class="route-stop-dot"></div><div class="route-stop-name">Porto</div><div class="route-stop-dates">19–22 Jun</div></div>
+      <div class="route-arrow">→</div>
+      <div class="route-stop minho"><div class="route-stop-dot"></div><div class="route-stop-name">Sabadim</div><div class="route-stop-dates">22–24 Jun</div></div>
+      <div class="route-arrow">→</div>
+      <div class="route-stop douro"><div class="route-stop-dot"></div><div class="route-stop-name">Amarante</div><div class="route-stop-dates">24–26 Jun</div></div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--terra)"></div>Algarve</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Lisbon</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--navy)"></div>Porto</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div>Minho</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--copper)"></div>Douro</div>
+    </div>
+  </div>
+
+  <div class="stops-section">
+    <div class="section-label">Stops &amp; Accommodation</div>
+
+    <div class="stop-card algarve">
+      <div class="stop-meta">
+        <div class="stop-num">Stop 01</div>
+        <div class="stop-dates">14–16 Jun</div>
+        <div class="stop-nights">2 nights</div>
+      </div>
+      <div>
+        <div class="stop-city">Faro</div>
+        <div class="stop-region">Algarve</div>
+        <div class="stop-property">HI Faro – Pousada de Juventude<span class="booked-tag">Booked</span></div>
+        <div class="stop-property-type">Hostel · 2★ · 8.6/10 Excellent · 10 min walk to Faro Marina</div>
+        <div class="stop-pricing">
+          <span class="stop-price">£77.91</span>
+          <span class="stop-price-label">total</span>
+          <span class="stop-pp">£38.96 per person · £19.48/night each</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop-card lisbon">
+      <div class="stop-meta">
+        <div class="stop-num">Stop 02</div>
+        <div class="stop-dates">16–19 Jun</div>
+        <div class="stop-nights">3 nights</div>
+      </div>
+      <div>
+        <div class="stop-city">Lisbon</div>
+        <div class="stop-region">Amadora · 30 min metro to centre</div>
+        <div class="stop-property">SM4 by Lisbon with Sintra<span class="booked-tag">Booked</span></div>
+        <div class="stop-property-type">Private room in rental unit · 4.81★ · 184 reviews · 1 min to train station</div>
+        <div class="stop-pricing">
+          <span class="stop-price">£107.17</span>
+          <span class="stop-price-label">total</span>
+          <span class="stop-pp">£53.59 per person · £17.86/night each</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop-card porto">
+      <div class="stop-meta">
+        <div class="stop-num">Stop 03</div>
+        <div class="stop-dates">19–22 Jun</div>
+        <div class="stop-nights">3 nights</div>
+      </div>
+      <div>
+        <div class="stop-city">Porto</div>
+        <div class="stop-region">Maia · 18 min walk to airport</div>
+        <div class="stop-property">Oporto Fly Hotel — Twin Room<span class="booked-tag">Booked</span></div>
+        <div class="stop-property-type">Hotel · 4★ · 9.2/10 Wonderful · Free airport shuttle · On-site gym</div>
+        <div class="stop-pricing">
+          <span class="stop-price">£227.35</span>
+          <span class="stop-price-label">total</span>
+          <span class="stop-pp">£113.68 per person · £37.89/night each</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop-card minho">
+      <div class="stop-meta">
+        <div class="stop-num">Stop 04</div>
+        <div class="stop-dates">22–24 Jun</div>
+        <div class="stop-nights">2 nights</div>
+      </div>
+      <div>
+        <div class="stop-city">Sabadim</div>
+        <div class="stop-region">Viana do Castelo · 50 min from Peneda-Gerês</div>
+        <div class="stop-property">Quinta da Lembrança — Raspa House<span class="booked-tag">Booked</span></div>
+        <div class="stop-property-type">Entire home · 5.0★ · Shared pool · Mountain views · Outdoor kitchen &amp; firepit</div>
+        <div class="stop-pricing">
+          <span class="stop-price">£185.27</span>
+          <span class="stop-price-label">total</span>
+          <span class="stop-pp">£92.64 per person · £46.32/night each</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop-card douro">
+      <div class="stop-meta">
+        <div class="stop-num">Stop 05</div>
+        <div class="stop-dates">24–26 Jun</div>
+        <div class="stop-nights">2 nights</div>
+      </div>
+      <div>
+        <div class="stop-city">Amarante</div>
+        <div class="stop-region">Porto District · Gateway to the Douro</div>
+        <div class="stop-property">Mimo House — Pátio<span class="booked-tag">Booked</span></div>
+        <div class="stop-property-type">Entire home · 4.99★ · 308 reviews · River views · Top 5% of homes</div>
+        <div class="stop-pricing">
+          <span class="stop-price">£172.24</span>
+          <span class="stop-price-label">total</span>
+          <span class="stop-pp">£86.12 per person · £43.06/night each</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport-section">
+    <div class="section-label">Transport</div>
+
+    <div class="transport-item">
+      <div class="transport-date">14 Jun</div>
+      <div>
+        <div class="transport-detail"><span class="transport-icon">✈️</span>Bristol → Faro<span class="booked-tag">Booked</span></div>
+        <div class="transport-mode">Ryanair FR4147 · 05:55 – 08:35 · Direct (2h40)</div>
+      </div>
+      <div>
+        <div class="transport-price">£58.94</div>
+        <div class="transport-price-pp">total · £29.47 per person</div>
+      </div>
+    </div>
+
+    <div class="transport-item">
+      <div class="transport-date">14 / 15 Jun</div>
+      <div>
+        <div class="transport-detail"><span class="transport-icon">🚗</span>Faro car rental · 1 day</div>
+        <div class="transport-mode">DiscoverCars · VW Polo or similar · For Praia da Marinha drive</div>
+      </div>
+      <div>
+        <div class="transport-price">~£17</div>
+        <div class="transport-price-pp">total · £8.50 per person</div>
+      </div>
+    </div>
+
+    <div class="transport-item">
+      <div class="transport-date">16 Jun</div>
+      <div>
+        <div class="transport-detail"><span class="transport-icon">🚌</span>Faro → Lisbon</div>
+        <div class="transport-mode">FlixBus · ~4.5 hrs</div>
+      </div>
+      <div>
+        <div class="transport-price">~£36</div>
+        <div class="transport-price-pp">total · £18 per person</div>
+      </div>
+    </div>
+
+    <div class="transport-item">
+      <div class="transport-date">19 Jun</div>
+      <div>
+        <div class="transport-detail"><span class="transport-icon">🚌</span>Lisbon → Porto</div>
+        <div class="transport-mode">FlixBus · ~3.5 hrs</div>
+      </div>
+      <div>
+        <div class="transport-price">~£30</div>
+        <div class="transport-price-pp">total · £15 per person</div>
+      </div>
+    </div>
+
+    <div class="transport-item">
+      <div class="transport-date">22 – 26 Jun</div>
+      <div>
+        <div class="transport-detail"><span class="transport-icon">🚗</span>Porto Airport car rental · 4 days</div>
+        <div class="transport-mode">Pick-up 22 Jun · Porto → Sabadim → Amarante → Porto Airport</div>
+      </div>
+      <div>
+        <div class="transport-price">~£25</div>
+        <div class="transport-price-pp">total · £12.50 per person</div>
+      </div>
+    </div>
+
+    <div class="transport-item">
+      <div class="transport-date">22 – 26 Jun</div>
+      <div>
+        <div class="transport-detail"><span class="transport-icon">⛽</span>Fuel &amp; tolls</div>
+        <div class="transport-mode">~280 km total across the road trip</div>
+      </div>
+      <div>
+        <div class="transport-price">~£30</div>
+        <div class="transport-price-pp">total · £15 per person</div>
+      </div>
+    </div>
+
+    <div class="transport-item">
+      <div class="transport-date">26 Jun</div>
+      <div>
+        <div class="transport-detail"><span class="transport-icon">✈️</span>Porto → Birmingham<span class="booked-tag">Booked</span></div>
+        <div class="transport-mode">Ryanair FR8513 · 18:40 – 21:00 · Direct (2h20)</div>
+      </div>
+      <div>
+        <div class="transport-price">£93.64</div>
+        <div class="transport-price-pp">total · £46.82 per person</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="budget-section">
+    <div class="section-label">Budget per person</div>
+    <div class="budget-total">
+      <div class="budget-num">£530</div>
+      <div class="budget-label">all-in for 13 days</div>
+    </div>
+    <p class="budget-note">Excludes food, attractions &amp; incidentals · Confirmed bookings + estimates for what remains</p>
+
+    <div class="budget-grid">
+      <div class="budget-cell">
+        <div class="budget-cat">Accommodation · 12 nights</div>
+        <div class="budget-amt">£384.97</div>
+        <div class="budget-bar"><div class="budget-bar-fill" style="width:73%;background:var(--terra)"></div></div>
+        <div class="budget-cell-detail">Faro £38.96 · Lisbon £53.59 · Porto £113.68 · Sabadim £92.64 · Amarante £86.12</div>
+      </div>
+
+      <div class="budget-cell">
+        <div class="budget-cat">Flights</div>
+        <div class="budget-amt">£76.29</div>
+        <div class="budget-bar"><div class="budget-bar-fill" style="width:14%;background:var(--navy)"></div></div>
+        <div class="budget-cell-detail">BRS → FAO £29.47 · OPO → BHX £46.82 (Ryanair)</div>
+      </div>
+
+      <div class="budget-cell">
+        <div class="budget-cat">FlixBus</div>
+        <div class="budget-amt">£33</div>
+        <div class="budget-bar"><div class="budget-bar-fill" style="width:6%;background:var(--gold)"></div></div>
+        <div class="budget-cell-detail">Faro → Lisbon · Lisbon → Porto · estimated</div>
+      </div>
+
+      <div class="budget-cell">
+        <div class="budget-cat">Car hire · your share</div>
+        <div class="budget-amt">£21</div>
+        <div class="budget-bar"><div class="budget-bar-fill" style="width:4%;background:var(--sage)"></div></div>
+        <div class="budget-cell-detail">Faro 1 day + Porto 4 days · split between 2 · estimated</div>
+      </div>
+
+      <div class="budget-cell">
+        <div class="budget-cat">Fuel &amp; tolls · your share</div>
+        <div class="budget-amt">£15</div>
+        <div class="budget-bar"><div class="budget-bar-fill" style="width:3%;background:var(--copper)"></div></div>
+        <div class="budget-cell-detail">~280 km of driving · split between 2 · estimated</div>
+      </div>
+
+      <div class="budget-cell budget-cell-wide">
+        <div class="budget-cat">Total per person</div>
+        <div class="budget-amt budget-amt-large">£530</div>
+        <div class="budget-cell-detail">Trip total for 2 travellers: <strong>£1,060</strong> · Confirmed bookings so far: <strong>£922.52 (£461.26pp)</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes-section">
+    <div class="section-label">Good to know</div>
+    <div class="notes-grid">
+      <div class="note-card">
+        <span class="note-icon">🛬</span>
+        <div class="note-title">Early start on 14 Jun</div>
+        <div class="note-text">Bristol flight departs 05:55, arrives Faro 08:35. Faro hostel check-in opens 18:00 — plenty of time for a beach morning. Bag drop available at the hostel.</div>
+      </div>
+      <div class="note-card">
+        <span class="note-icon">🏨</span>
+        <div class="note-title">Porto hotel is in Maia</div>
+        <div class="note-text">Oporto Fly Hotel is near Porto Airport, 18 min walk away. Convenient for car pickup on 22 Jun, but you'll need the metro (Linha E to Trindade, ~30 min) for Porto city sightseeing.</div>
+      </div>
+      <div class="note-card">
+        <span class="note-icon">⏰</span>
+        <div class="note-title">Return flight is 18:40</div>
+        <div class="note-text">Amarante checkout is 11am — drive ~50 min to Porto Airport. Need to be at OPO by ~17:00. A few hours possible for a quick Porto visit en route.</div>
+      </div>
+      <div class="note-card">
+        <span class="note-icon">📋</span>
+        <div class="note-title">Still to book</div>
+        <div class="note-text">FlixBus tickets (Faro→Lisbon, Lisbon→Porto), Faro car rental (1 day, 14 or 15 Jun) and Porto car rental (4 days, 22–26 Jun). All five accommodations and both flights are confirmed.</div>
+      </div>
+      <div class="note-card">
+        <span class="note-icon">🚗</span>
+        <div class="note-title">Road trip distances</div>
+        <div class="note-text">Porto (Maia) → Sabadim: ~1hr 15min · Sabadim → Amarante: ~1hr 30min · Amarante → Porto Airport: ~50min. Total ~280km across 4 days.</div>
+      </div>
+      <div class="note-card">
+        <span class="note-icon">🎒</span>
+        <div class="note-title">Faro hostel format</div>
+        <div class="note-text">HI Faro is a youth hostel with shared-bathroom rooms (6 beds). £19.48 per person per night. Lockers available, breakfast included. 10/10 location score from past guests.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="itinerary-footer">
+    <div class="footer-left">Bom caminho.</div>
+    <div class="footer-right">14 – 26 JUNE 2026<br>PORTUGAL</div>
+  </div>
+
+</div>
+</div>
